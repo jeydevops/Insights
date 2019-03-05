@@ -1,8 +1,8 @@
-echo "Kindly give the folder location"
+echo "Enter the Offline Folder location"
 read DIRECTORY
 if [ -d "$DIRECTORY" ]; then
-        echo "Choose what you want to install
-		1) All
+        echo "Choose what you want to install type the option example "1" for All Insights components
+		1) All Insights components
 		2) InsightsHome
 		3) Java
 		4) Neo4j
