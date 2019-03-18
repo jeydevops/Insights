@@ -84,7 +84,7 @@ class PivotalTrackerAgent(BaseAgent):
                 pass
             else:
                 trackingDetails = self.tracking.get('iteration_'+str(project), None).get('iterationNumber', None)
-                #print trackingDetails
+                
                 iteration_from_tracking = int(trackingDetails)
             limit_iteration = limit
             offset_iteration=offset#This will be the starting point of that particular api call iteration
@@ -110,8 +110,6 @@ class PivotalTrackerAgent(BaseAgent):
                     iteration_start_time = iteration['start']
                     iteration_end_time = iteration['finish']
                     pattern = '%Y-%m-%dT%H:%M:%SZ'
-                    #print iteration_start_time
-                    #print iteration_end_time
                     iteration_start_time = int(time.mktime(time.strptime(iteration_start_time, pattern)))
                     iteration_end_time = int(time.mktime(time.strptime(iteration_end_time, pattern)))
                     #---------------------------------------------------------------------------
@@ -198,9 +196,8 @@ class PivotalTrackerAgent(BaseAgent):
                         injectdata['attachedCommitId'] = change['new_values']['commit_identifier']
                         injectdata['attachedScmType'] = change['new_values']['commit_type']
                         injectdata['attachedCommitMessage'] = change['new_values']['text']
-                    #-------------------------------CommitID
-        data_story.append(injectdata)            
-        return data_story
+                    #-------------------------------CommitID                    
+        return injectdata
     
     def prepare_data_for_project(self, workspace_name, project_id, data):
 
@@ -259,7 +256,6 @@ class PivotalTrackerAgent(BaseAgent):
             activities = self.getResponse(activities_url, 'GET', userid, passwd, None, reqHeaders=reqHeaders)
             if len(activities) > 0:
                 offset_proj=offset_proj+limit_proj
-                #print time.mktime(time.strptime(activities[0]['occurred_at'], timeStampFormat))
                 latest_update_time = int(time.mktime(time.strptime(activities[0]['occurred_at'], timeStampFormat)))
 
                 if project_last_updation_time < latest_update_time:
@@ -271,8 +267,7 @@ class PivotalTrackerAgent(BaseAgent):
 
                     self.tracking[str(project_id)] = trackingDetails
 
-#               self.updateTrackingJson(self.tracking)
-#               for story in story_details[0]:
+
                 for length_story_details in range(len(story_details)):
                     for story in story_details[length_story_details]:
                         flag = 0
