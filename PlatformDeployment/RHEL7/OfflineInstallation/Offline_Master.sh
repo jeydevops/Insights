@@ -256,6 +256,8 @@ if [ -d "$DIRECTORY" ]; then
 				export INSIGHTS_AGENT_HOME=`pwd`
 				echo INSIGHTS_AGENT_HOME=`pwd` | tee -a /etc/environment
 				echo "export" INSIGHTS_AGENT_HOME=`pwd` | tee -a /etc/profile
+				mkdir OfflineAgent
+				chmod -R 777 OfflineAgent
 				mkdir PlatformAgents
 				chmod -R 755 PlatformAgents
 				echo $INSIGHTS_AGENT_HOME
