@@ -461,6 +461,7 @@ if [ -d "$DIRECTORY" ]; then
 				echo -e $insightsStatus
 		}
 		status
+		echo "Important Note: After installing all the commands grafana enpoint to be changed in the location /usr/INSIGHTS_HOME/.InSights/server-config.json , change localhost:3000 to ***the server Public IP***:3000,Ignore if already done"
 else
         echo "Type valid location"
 fi
