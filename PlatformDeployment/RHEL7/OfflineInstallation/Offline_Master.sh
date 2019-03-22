@@ -266,9 +266,8 @@ if [ -d "$DIRECTORY" ]; then
 				source /etc/profile
 				sed -i -e "s|extractionpath|$INSIGHTS_AGENT_HOME/PlatformAgents|g" $INSIGHTS_AGENT_HOME/agentdaemon/com/cognizant/devops/platformagents/agents/agentdaemon/config.json
 				chmod +x installdaemonagent.sh
-				mkdir /opt/agent20
-				mkdir /opt/agent20/download
-				chmod -R 777 /opt/agent20
+				mkdir /opt/agentunzip/
+				chmod -R 777 /opt/agentunzip
 				sh ./installdaemonagent.sh Linux
 				sleep 20
 		}
