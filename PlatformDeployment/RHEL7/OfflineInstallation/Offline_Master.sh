@@ -201,6 +201,8 @@ if [ -d "$DIRECTORY" ]; then
 				pip install $DIRECTORY/Offline_Installation/Python/Libraries/urllib3-1.23-py2.py3-none-any.whl
 				cp $DIRECTORY/Offline_Installation/Python/Libraries/requests-2.19.1-py2.py3-none-any.whl ./
 				pip install --no-index --find-links requests-2.19.1-py2.py3-none-any.whl requests
+				pip install $DIRECTORY/Offline_Installation/Python/Libraries/boto3-1.9.124-py2.py3-none-any.whl
+				pip install $DIRECTORY/Offline_Installation/Python/Libraries/ipaddress-1.0.22-py2.py3-none-any.whl
 				source /etc/environment
 				source /etc/profile
 				sleep 5
