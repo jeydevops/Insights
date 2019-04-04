@@ -48,7 +48,7 @@ gitCommitID = sh (
 	sh 'mvn versions:update-child-modules'
 	   }
 	} // if
-     //Builds and package insights artifacts	
+     //Builds and package insights artifacts	.
    stage ('Insight_PS_Build') {
         sh 'cd /var/jenkins/jobs/$commitID/workspace/PlatformUI3 && npm install'
 	sh 'cd /var/jenkins/jobs/$commitID/workspace && mvn clean install -DskipTests'
