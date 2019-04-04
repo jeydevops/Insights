@@ -6,6 +6,12 @@ gitCommitID = sh (
     script: 'echo $commitID | cut -d "-" -f2',
     returnStdout: true
 ).trim()
+	
+	//Parse commitID (E.g, buildon-abc1234 to abc1234)
+branch = sh (
+    script: 'echo $branchName',
+    returnStdout: true
+).trim()
 
 // All single and double quotes in this file are used in a certain format.Do not alter in any step 
 	//ApacheLicense Check in java and Python files
@@ -41,8 +47,8 @@ gitCommitID = sh (
    // Platform Service Starts
 	try{
 	echo 'branchName'
-	echo ${branchName}
-	if(${branchName} != 'master')
+	echo $branch
+	if($branch != 'master')
 	{
     	//Update version	
    	stage ('Insight_UpdateVersion') {
