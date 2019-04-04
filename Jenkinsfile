@@ -39,15 +39,29 @@ gitCommitID = sh (
   	} //License Check ends	
    // Platform Service Starts
 	try{
-	
+	if($branchName!='master')
+	{
+    	//Update version	
+   	stage ('Insight_UpdateVersion') {
+	   //Testing artifact
+        sh 'mvn versions:set -DnewVersion=${branchName}-5.0.1-SNAPSHOT'
+	sh 'mvn versions:update-child-modules'
+	   }
+	} // if
+     //Builds and package insights artifacts	
    stage ('Insight_PS_Build') {
         sh 'cd /var/jenkins/jobs/$commitID/workspace/PlatformUI3 && npm install'
 	sh 'cd /var/jenkins/jobs/$commitID/workspace && mvn clean install -DskipTests'
-	   }	
+	   }
+		/*
+   //Evaluate Insights artifacts in Nexus3 IQ server. applicationId must be created in IQ server and also enable user access to this app.
+    stage ('Insight_PS_IQ') {	
+	sh 'mvn com.sonatype.clm:clm-maven-plugin:evaluate -Dclm.applicationId=Insights'
+   	  }		
+		
 	stage ('Insight_PS_CodeAnalysis') {
 		sh 'mvn sonar:sonar -Dmaven.test.failure.ignore=true -DskipTests=true -Dsonar.sources=src/main/java -pl !PlatformUI3'
-		
-        }
+	  }
 		
         stage ('Insight_PUI2.0_CodeAnalysis') {		
 		sh 'cd /var/jenkins/jobs/$commitID/workspace/PlatformUI2.0 && mvn sonar:sonar -Dmaven.test.failure.ignore=true -DskipTests=true -Dsonar.sources=app/src/modules -Dsonar.language=js -Dsonar.javascript.file.suffixes=.ts'
@@ -55,21 +69,22 @@ gitCommitID = sh (
         stage ('Insight_PUI3_CodeAnalysis') {		
 		sh 'cd /var/jenkins/jobs/$commitID/workspace/PlatformUI3 && mvn sonar:sonar -Dmaven.test.failure.ignore=true -DskipTests=true -Dsonar.sources=src/app/com/cognizant/devops/platformui/modules -Dsonar.language=js -Dsonar.javascript.file.suffixes=.ts'
 	}
+	*/
 		
 	stage ('Insight_PS_NexusUpload') {		
 		sh 'mvn deploy -DskipTests=true'		
 		}
+		
 	
 	}
-	catch (err){
-		
-	slackSend channel: '#insightsjenkins', color: 'bad', message: "BuildFailed for commitID - *$gitCommitID*, Branch - *$branchName* \n Build Log can be found @ https://buildon.cogdevops.com/buildon/HistoricCIWebController?commitId=$gitCommitID", teamDomain: "insightscogdevops", token: slackToken
+	catch (err){		
+	//slackSend channel: '#insightsjenkins', color: 'bad', message: "BuildFailed for commitID - *$gitCommitID*, Branch - *$branchName* \n Build Log can be found @ https://buildon.cogdevops.com/buildon/HistoricCIWebController?commitId=$gitCommitID", teamDomain: "insightscogdevops", token: slackToken
 	sh 'exit 1'
 	}	
 	// Platform Service Ends	   
 	   
         //Send Notification to Slack Channel
-	stage ('SlackNotification') {
+	/*stage ('SlackNotification') {
 	
 	//Framing Nexus URL for artifact uploaded to Nexus with unique timestamp
 		//PlatformService version
@@ -98,7 +113,7 @@ gitCommitID = sh (
 		
 		if(pomversionService.contains("SNAPSHOT") && pomversionEngine.contains("SNAPSHOT") && pomversion.contains("SNAPSHOT") && pomUIversion.contains("SNAPSHOT") && pomUI3version.contains("SNAPSHOT")){
 		
-			NEXUSREPO="http://insightsplatformnexusrepo.cogdevops.com:8001/nexus/content/repositories/buildonInsights"
+			NEXUSREPO="http://repo.cogdevops.com/repository/buildonInsights"
 			
 			//get artifact info (artifactID,classifier,timestamp, buildnumber,version) from maven-metadata.xml
 		sh "curl -s ${NEXUSREPO}/com/cognizant/devops/PlatformService/${pomversionService}/maven-metadata.xml  | grep -oP '(?<=<artifactId>).*?(?=</artifactId>)|(?<=<version>).*?(?=</version>)|(?<=<timestamp>).*?(?=</timestamp>)|(?<=<buildNumber>).*?(?=</buildNumber>)|(?<=<classifier>).*?(?=</classifier>)' | paste -sd- - | sed 's/-SNAPSHOT//g' | sed 's/--/-/g' | sed 's/\$/.war/' > /var/jenkins/jobs/$commitID/workspace/PlatformService/PS_artifact"
@@ -118,7 +133,7 @@ gitCommitID = sh (
 		
 		} else {
 		
-		    NEXUSREPO="http://insightsplatformnexusrepo.cogdevops.com:8001/nexus/content/repositories/InsightsRelease"
+		    NEXUSREPO="http://repo.cogdevops.com/repository/InsightsRelease"
 			
 			//get artifact info (artifactID,classifier,timestamp, buildnumber,version) from maven-metadata.xml
 		sh "curl -s ${NEXUSREPO}/com/cognizant/devops/PlatformService/maven-metadata.xml  | grep -oP '(?<=<artifactId>).*?(?=</artifactId>)|(?<=<release>).*?(?=</release>)|(?<=<timestamp>).*?(?=</timestamp>)|(?<=<buildNumber>).*?(?=</buildNumber>)|(?<=<classifier>).*?(?=</classifier>)' | paste -sd- - | sed 's/-SNAPSHOT//g' | sed 's/--/-/g' | sed 's/\$/.war/' > /var/jenkins/jobs/$commitID/workspace/PlatformService/PS_artifact"
@@ -160,4 +175,5 @@ gitCommitID = sh (
 	
    	    slackSend channel: '#insightsjenkins', color: 'good', message: "New Insights artifacts are uploaded to Nexus for commitID : *${env.commitID}* ,Branch - *${env.branchName}* \n *PlatformService* ${PS_artifact} \n *PlatformEngine* ${PE_artifact} \n *PlatformInsights*  ${PI_artifact} \n *PlatformUI2.0* ${PUI_artifact} \n *PlatformUI3* ${PUI3_artifact}", teamDomain: 'insightscogdevops', token: slackToken // "*" is for making the text bold in slack notification
   	}
+	*/
 }
