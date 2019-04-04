@@ -39,6 +39,8 @@ gitCommitID = sh (
   	} //License Check ends	
    // Platform Service Starts
 	try{
+		sh 'echo branchName'
+		sh 'echo $branchName'
 	if($branchName!='master')
 	{
     	//Update version	
@@ -48,6 +50,9 @@ gitCommitID = sh (
 	sh 'mvn versions:update-child-modules'
 	   }
 	} // if
+	else{
+	sh 'exit 1'
+	}
      //Builds and package insights artifacts	.
    stage ('Insight_PS_Build') {
         sh 'cd /var/jenkins/jobs/$commitID/workspace/PlatformUI3 && npm install'
