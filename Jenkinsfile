@@ -41,18 +41,20 @@ gitCommitID = sh (
 	try{
 		sh 'echo branchName'
 		sh 'echo $branchName'
-	if($branchName!='master')
-	{
+	
     	//Update version	
    	stage ('Insight_UpdateVersion') {
+		if($branchName!='master')
+	{
 	   //Testing artifact
         sh 'mvn versions:set -DnewVersion=${branchName}-5.0.1-SNAPSHOT'
 	sh 'mvn versions:update-child-modules'
-	   }
-	} // if
+		} // if
 	else{
 	sh 'exit 1'
 	}
+	   }
+	
      //Builds and package insights artifacts	.
    stage ('Insight_PS_Build') {
         sh 'cd /var/jenkins/jobs/$commitID/workspace/PlatformUI3 && npm install'
