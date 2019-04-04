@@ -44,21 +44,21 @@ Branch = sh (
   	} //License Check ends	
    // Platform Service Starts
 	try{
-		
-	echo $Branch
-	
+	echo 'Branch'
+	echo ${Branch}
+	if(${Branch} != 'master')
+	{
     	//Update version	
    	stage ('Insight_UpdateVersion') {
-		if($Branch != 'master')
-	{
+		
 	   //Testing artifact
         sh 'mvn versions:set -DnewVersion=${branchName}-5.0.1-SNAPSHOT'
-	sh 'mvn versions:update-child-modules'
+	sh 'mvn versions:update-child-modules'		
+	   }
 		} // if
 	else{
 	sh 'exit 1'
 	}
-	   }
 	
      //Builds and package insights artifacts	.
    stage ('Insight_PS_Build') {
