@@ -6,6 +6,11 @@ gitCommitID = sh (
     script: 'echo $commitID | cut -d "-" -f2',
     returnStdout: true
 ).trim()
+//Parse Branch (E.g, master,PlatformUI3)
+Branch = sh (
+    script: 'echo $branchName',
+    returnStdout: true
+).trim()
 // All single and double quotes in this file are used in a certain format.Do not alter in any step 
 	//ApacheLicense Check in java and Python files
 	stage ('LicenseCheck') {
@@ -39,12 +44,12 @@ gitCommitID = sh (
   	} //License Check ends	
    // Platform Service Starts
 	try{
-		sh 'echo branchName'
-		sh 'echo $branchName'
+		
+	echo $branchName
 	
     	//Update version	
    	stage ('Insight_UpdateVersion') {
-		if($branchName!='master')
+		if($branchName == 'PlatformUI3.0')
 	{
 	   //Testing artifact
         sh 'mvn versions:set -DnewVersion=${branchName}-5.0.1-SNAPSHOT'
