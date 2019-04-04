@@ -45,11 +45,11 @@ Branch = sh (
    // Platform Service Starts
 	try{
 		
-	echo $branchName
+	echo $Branch
 	
     	//Update version	
    	stage ('Insight_UpdateVersion') {
-		if($branchName == 'PlatformUI3.0')
+		if($Branch != 'master')
 	{
 	   //Testing artifact
         sh 'mvn versions:set -DnewVersion=${branchName}-5.0.1-SNAPSHOT'
