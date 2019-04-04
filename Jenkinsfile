@@ -46,9 +46,9 @@ branch = sh (
   	} //License Check ends	
    // Platform Service Starts
 	try{
-	echo 'branchName'
-	echo $branch
-	if($branch != 'master')
+	echo 'branch'
+	echo branch
+	if(branch != 'master')
 	{
     	//Update version	
    	stage ('Insight_UpdateVersion') {
